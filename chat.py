@@ -9,13 +9,13 @@ socket = SocketIO(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@localhost:5432/flask_chat'
 database = SQLAlchemy(app)
 
-class ChatHistory(database.Model):
+class History(database.Model):
 	id = database.Column('id', database.Integer, primary_key=True)
 	message = database.Column('message', database.String(500))
 
 @socket.on('message')
 def handleMessage(message_to_post):
-	message = ChatHistory(message=message_to_post)
+	message = History(message=message_to_post)
 	database.session.add(message)
 	database.session.commit()
 
@@ -23,7 +23,7 @@ def handleMessage(message_to_post):
 
 @app.route('/')
 def index():
-    messages = ChatHistory.query.all()
+    messages = History.query.all()
     return render_template('index.html', messages=messages)
 
 if __name__ == '__main__':
