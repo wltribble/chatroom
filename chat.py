@@ -3,10 +3,17 @@ from flask_socketio import SocketIO, send
 from flask_sqlalchemy import SQLAlchemy
 
 import psycopg2
-import urlparse
+import os
+try:
+	import urlparse
+except:
+	pass
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'apparently_i_need_this'
+try:
+	app.config['SECRET_KEY'] = os.environ["SECRET_KEY"]
+except:
+	app.config['SECRET_KEY'] = 'apparently_i_need_this'
 socket = SocketIO(app)
 
 # Database setup
