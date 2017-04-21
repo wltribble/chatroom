@@ -1,5 +1,5 @@
 Flask==0.12.1
-Werkzeug==0.12.1
-Flask-SQLAlchemy==2.1
 Flask_SocketIO==2.8.6
+Flask-SQLAlchemy==2.1
+Jinja2==2.9.6
 Wekzeug==0.12.1
