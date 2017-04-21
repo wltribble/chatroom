@@ -6,7 +6,6 @@ from jinja2 import Environment
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'apparently_i_need_this'
 socket = SocketIO(app)
-jinja_environment = Environment(extensions=['jinja2.ext.loopcontrols'])
 
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@localhost:5432/flask_chat'
