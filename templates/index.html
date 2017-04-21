@@ -37,14 +37,21 @@
                             color: #000000;
                         }
 
-                        #delete_db {
+                        #delete_button {
                             color: #000000;
+                        }
+
+                        #inputs {
+                            padding-bottom: 50px;
+                            margin-bottom: 50px;
                         }
 
                     </style>
                     <script type="text/javascript">
                         $(document).ready(function() {
                             var socket = io.connect('http://127.0.0.1:5000');
+                            // var messages_shown = 10;
+                            // var has_been_deleted = false;
 
                             socket.on('connect', function() {
                                 socket.send('A new user just joined the chat!');
@@ -52,6 +59,10 @@
 
                             socket.on('message', function(message_to_post) {
                                 $('#message_history').append('<li>'+message_to_post+'</li>')
+                                // {% if has_been_deleted == true %}
+                                //     messages_shown++;
+                                // {% endif %}
+
                             });
 
                             $('#send_button').on('click', function() {
@@ -62,12 +73,17 @@
                         });
                     </script>
                     <ul id="message_history">
-                        {% for message in messages[1:] %}
-                            <li>{{ message.message }}</li>
+                        {% for message in messages %}
+                            {% if loop.index >= (messages|length - 10) %}
+                                <li>{{ message.message }}</li>
+                            {% endif %}
                         {% endfor %}
                     </ul>
-                    <input type="text" id="my_message">
-                    <button id="send_button">Send</button>
+                    <div id="inputs">
+                        <input type="text" id="my_message">
+                        <button id="send_button">Send</button>
+                        <button id="delete_button" onClick="history.go(0)">Clear Old Messages</button>
+                    </div>
                 </div>
             </div>
         </div>
