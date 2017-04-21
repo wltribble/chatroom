@@ -1,0 +1,92 @@
+<html>
+<head>
+    <title>Will's Chat App</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="http://getbootstrap.com/examples/cover/cover.css" rel="stylesheet">
+
+
+</head>
+<body>
+    <div class="site-wrapper">
+        <div class="site-wrapper-inner">
+            <div class="cover-container">
+                <div class="inner cover">
+                    <h1 class="cover-heading">Will's Basic Chat Room</h1>
+                    <p class='lead'>Enter a message below to send it to all windows at once!</p>
+                    <p class="lead">
+                        <div class='col-sm-6 col-sm-offset-3'>
+                        </div>
+                    </p>
+                    <style>
+                        ul {
+                          list-style-type: none;
+                          text-align: left;
+                        }
+
+                        li {
+                            clear: left;
+                        }
+
+                        #send_button {
+                            color: #000000;
+                        }
+
+                        #my_message {
+                            color: #000000;
+                        }
+
+                        #delete_button {
+                            color: #000000;
+                        }
+
+                        #inputs {
+                            padding-bottom: 50px;
+                            margin-bottom: 50px;
+                        }
+
+                    </style>
+                    <script type="text/javascript">
+                        $(document).ready(function() {
+                            var socket = io.connect('http://127.0.0.1:5000');
+                            // var messages_shown = 10;
+                            // var has_been_deleted = false;
+
+                            socket.on('connect', function() {
+                                socket.send('A new user just joined the chat!');
+                            });
+
+                            socket.on('message', function(message_to_post) {
+                                $('#message_history').append('<li>'+message_to_post+'</li>')
+                                // {% if has_been_deleted == true %}
+                                //     messages_shown++;
+                                // {% endif %}
+
+                            });
+
+                            $('#send_button').on('click', function() {
+                                socket.send($('#my_message').val());
+                                $('#my_message').val('');
+                            });
+
+                        });
+                    </script>
+                    <ul id="message_history">
+                        {% for message in messages %}
+                            {% if loop.index >= (messages|length - 10) %}
+                                <li>{{ message.message }}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                    <div id="inputs">
+                        <input type="text" id="my_message">
+                        <button id="send_button">Send</button>
+                        <button id="delete_button" onClick="history.go(0)">Clear Old Messages</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
