@@ -2,14 +2,14 @@ from flask import Flask, render_template
 from flask_socketio import SocketIO, send
 from flask_sqlalchemy import SQLAlchemy
 
+from urllib.parse import urlparse
+
 import psycopg2
 import os
-try:
-	import urlparse
-except:
-	pass
+
 
 app = Flask(__name__)
+
 try:
 	app.config['SECRET_KEY'] = os.environ["SECRET_KEY"]
 except:
@@ -18,16 +18,18 @@ socket = SocketIO(app)
 
 # Database setup
 try:
-	urlparse.uses_netloc.append("postgres")
-	url = urlparse.urlparse(os.environ["DATABASE_URL"])
+	url = urlparse(os.environ["DATABASE_URL"])
 
-	database = psycopg2.connect(
+	database_connection = psycopg2.connect(
 	    database=url.path[1:],
 	    user=url.username,
 	    password=url.password,
 	    host=url.hostname,
 	    port=url.port
 	)
+
+	database = SQLAlchemy(app)
+
 except:
 	app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@localhost:5432/flask_chat'
 	database = SQLAlchemy(app)
