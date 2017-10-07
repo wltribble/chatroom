@@ -1,2 +1,2 @@
 # chatroom
-A basic chatroom to demonstrate websockets, database integration, and bootstrap styling
+A basic chatroom to start learning websockets.
